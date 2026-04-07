@@ -130,6 +130,8 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://localhost:8000",
+    "http://127.0.0.1:64354",
+    "http://localhost:64354",
     "https://machinelike-unsentimentally-cherry.ngrok-free.dev",
     "https://*.ngrok-free.dev",
     "https://*.ngrok.io",
