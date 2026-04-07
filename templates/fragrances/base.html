@@ -373,15 +373,13 @@
             padding-left: 15px !important;
             padding-right: 15px !important;
             width: calc(100% + 30px) !important;
-        }
-        
-        /* Enhanced touch scrolling */
-        .products-grid,
-        .products-gri {
             scroll-behavior: smooth !important;
             -webkit-overflow-scrolling: touch !important;
             -webkit-transform: translateZ(0) !important;
             transform: translateZ(0) !important;
+            overflow-x: scroll !important;
+            overflow-y: hidden !important;
+            touch-action: pan-y pinch-zoom !important;
         }
         
         /* Touch indicators */
@@ -446,7 +444,8 @@
         margin-bottom: 0 !important;
         scroll-snap-align: start !important;
         -webkit-scroll-snap-align: start !important;
-        touch-action: pan-x pinch-zoom !important;
+        touch-action: pan-y pinch-zoom !important;
+        pointer-events: auto !important;
     }
     
     /* Collection Page Mobile Full Screen Width */
@@ -518,7 +517,8 @@
         margin-bottom: 0 !important;
         scroll-snap-align: start !important;
         -webkit-scroll-snap-align: start !important;
-        touch-action: pan-x pinch-zoom !important;
+        touch-action: pan-y pinch-zoom !important;
+        pointer-events: auto !important;
     }
     
     /* Hero Section Mobile Optimization */
