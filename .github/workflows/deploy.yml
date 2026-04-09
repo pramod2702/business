@@ -1,28 +1,48 @@
-script: |
-  set -e
+name: Deploy to EC2
 
-  echo "📂 Moving to project folder"
-  cd /home/ubuntu/business
+on:
+  push:
+    branches:
+      - main
 
-  echo "📥 Pulling latest code"
-  git pull origin main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-  echo "🐍 Activating virtual environment"
-  source venv/bin/activate
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.0
 
-  echo "📦 Installing dependencies"
-  pip install -r requirements.txt
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
 
-  echo "⚙️ Running migrations"
-  python manage.py migrate
+          script: |
+            set -e
 
-  echo "🎨 Collecting static files"
-  python manage.py collectstatic --noinput
+            echo "📂 Moving to project folder"
+            cd /home/ubuntu/business
 
-  echo "🔁 Restarting Gunicorn"
-  sudo systemctl restart gunicorn
+            echo "📥 Pulling latest code"
+            git pull origin main
 
-  echo "🔁 Restarting Nginx"
-  sudo systemctl restart nginx
+            echo "🐍 Activating virtual environment"
+            source venv/bin/activate
 
-  echo "✅ Deployment completed successfully!"
+            echo "📦 Installing dependencies"
+            pip install -r requirements.txt
+
+            echo "⚙️ Running migrations"
+            python manage.py migrate
+
+            echo "🎨 Collecting static files"
+            python manage.py collectstatic --noinput
+
+            echo "🔁 Restarting Gunicorn"
+            sudo systemctl restart gunicorn
+
+            echo "🔁 Restarting Nginx"
+            sudo systemctl restart nginx
+
+            echo "✅ Deployment completed successfully!"
