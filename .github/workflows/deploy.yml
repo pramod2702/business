@@ -1,24 +1,36 @@
-- name: Deploy using direct SSH
-  run: |
-    echo "${{ secrets.EC2_KEY }}" > key.pem
-    chmod 600 key.pem
+name: Deploy to EC2 (Working Method)
 
-    ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+on:
+  push:
+    branches:
+      - main
 
-    echo "Connected ✅"
-    cd /home/ubuntu/business
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-    git pull origin main
+    steps:
+      - name: Deploy using direct SSH
+        run: |
+          echo "${{ secrets.EC2_KEY }}" > key.pem
+          chmod 600 key.pem
 
-    source venv/bin/activate
-    pip install -r requirements.txt
+          ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
 
-    python manage.py migrate
-    python manage.py collectstatic --noinput
+          echo "Connected ✅"
+          cd /home/ubuntu/business
 
-    sudo systemctl restart gunicorn
-    sudo systemctl restart nginx
+          git pull origin main
 
-    echo "Deployment done 🚀"
+          source venv/bin/activate
+          pip install -r requirements.txt
 
-    EOF
+          python manage.py migrate
+          python manage.py collectstatic --noinput
+
+          sudo systemctl restart gunicorn
+          sudo systemctl restart nginx
+
+          echo "Deployment done 🚀"
+
+          EOF
